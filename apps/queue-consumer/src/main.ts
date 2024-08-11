@@ -1,13 +1,18 @@
 import { SQSClient } from "@aws-sdk/client-sqs";
 import { Consumer } from "sqs-consumer";
-import { awsAccessKey, awsSecretAccessKey, tempQueueUrl } from "./config";
+import {
+  awsAccessKey,
+  awsRegion,
+  awsSecretAccessKey,
+  tempQueueUrl,
+} from "./config";
 import { sqsHandler } from "./sqshandler";
 
 const app = Consumer.create({
   queueUrl: tempQueueUrl,
   handleMessage: sqsHandler,
   sqs: new SQSClient({
-    region: "ap-south-1",
+    region: awsRegion,
     credentials: {
       accessKeyId: awsAccessKey,
       secretAccessKey: awsSecretAccessKey,
