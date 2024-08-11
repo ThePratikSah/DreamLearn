@@ -6,6 +6,7 @@ const {
 const fs = require("node:fs/promises");
 const nodeFs = require("node:fs");
 const path = require("node:path");
+const { nanoid } = require("nanoid");
 
 const ffmpeg = require("fluent-ffmpeg");
 
@@ -46,8 +47,14 @@ async function main() {
     const originalVideoPath = path.join(originalFilePath);
 
     console.log("Transcoding video...");
+    const uniqueDir = nanoid();
+
+    fs.mkdir(uniqueDir, { recursive: true });
     const promises = resolutions.map(async (resolution) => {
-      const outputFilePath = `${resolution.name}-video.mp4`;
+      const outputFilePath = path.join(
+        uniqueDir,
+        `${resolution.name}-video.mp4`,
+      );
 
       return new Promise((resolve, reject) => {
         ffmpeg(originalVideoPath)
