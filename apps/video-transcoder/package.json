@@ -3,11 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "start": "node main.js",
     "prettier": "prettier --write .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.627.0",
+    "fluent-ffmpeg": "^2.1.3"
+  }
 }
