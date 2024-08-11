@@ -2,6 +2,7 @@ import { Message } from "@aws-sdk/client-sqs";
 import type { S3Event } from "aws-lambda";
 import { startDockerLocally } from "./utils/docker";
 import { runECSTask } from "./utils/ecsClient";
+import { getContainerLogs } from "./utils/containerLogs";
 
 const env = process.env.ENV || "DEV";
 console.log({ env });
@@ -28,8 +29,9 @@ export async function sqsHandler(message: Message) {
 
       if (env === "DEV") {
         console.log("Running task locally...");
-        await startDockerLocally(key);
+        const id = await startDockerLocally(key);
         console.log("Task started");
+        await getContainerLogs(id);
       } else {
         console.log("Running new task on ECS...");
         await runECSTask(key);

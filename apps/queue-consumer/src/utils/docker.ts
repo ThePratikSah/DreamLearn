@@ -6,7 +6,7 @@ import {
   tempBucketName,
 } from "../config";
 
-export async function startDockerLocally(key: string) {
+export async function startDockerLocally(key: string): Promise<string> {
   const docker = new Docker();
   const container = await docker.createContainer({
     Image: "video-transcoder",
@@ -20,4 +20,5 @@ export async function startDockerLocally(key: string) {
   });
 
   await container.start();
+  return container.id;
 }
