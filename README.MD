@@ -63,4 +63,4 @@ We welcome contributions from the community! If you'd like to contribute to the 
 - Submit a pull request with a clear description of your changes.
 
 Contact
-For any questions or issues, please reach out to us at shivam3448@gmail.com
+For any questions or issues, please reach out to us at pratiksah@hotmail.com
