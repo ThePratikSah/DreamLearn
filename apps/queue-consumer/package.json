@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "prettier": "prettier --write .",
     "dev": "tsc-watch --onSuccess \"node --watch --env-file .env dist/main.js\""
   },
   "keywords": [],

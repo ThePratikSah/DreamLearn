@@ -2,7 +2,10 @@
   "name": "learnn",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "prettier": "prettier --write 'apps/**/*.{js,ts,jsx,tsx,json,md}' 'packages/**/*.{js,ts,jsx,tsx,json,md}'",
+    "format": "npm run prettier"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -10,5 +13,8 @@
   "workspaces": [
     "apps/queue-consumer",
     "apps/video-transcoder"
-  ]
+  ],
+  "devDependencies": {
+    "prettier": "^3.3.3"
+  }
 }
