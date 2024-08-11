@@ -1,4 +1,5 @@
 import axios from "axios";
+import { deleteContainer } from "./docker";
 
 export const getContainerLogs = async (containerId: string) => {
   const dockerSocket = "/var/run/docker.sock";
@@ -18,8 +19,10 @@ export const getContainerLogs = async (containerId: string) => {
         console.log(chunk.toString());
       });
 
-      response.data.on("end", () => {
+      response.data.on("end", async () => {
         console.log("Stream ended.");
+        await deleteContainer(containerId);
+        console.log("Container deleted.");
       });
 
       response.data.on("error", (error: Error) => {

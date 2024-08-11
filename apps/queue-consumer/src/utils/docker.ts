@@ -22,3 +22,8 @@ export async function startDockerLocally(key: string): Promise<string> {
   await container.start();
   return container.id;
 }
+
+export async function deleteContainer(containerId: string) {
+  const docker = new Docker();
+  await docker.getContainer(containerId).remove();
+}
