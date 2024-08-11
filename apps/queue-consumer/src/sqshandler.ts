@@ -1,13 +1,14 @@
 import { Message } from "@aws-sdk/client-sqs";
-import { ECSClient, RunTaskCommand } from "@aws-sdk/client-ecs";
 import type { S3Event } from "aws-lambda";
-import { awsConfig, awsEcsCluster, awsTaskDef } from "./config";
+import { startDockerLocally } from "./utils/docker";
+import { runECSTask } from "./utils/ecsClient";
 
-const ecsClient = new ECSClient(awsConfig);
+const env = process.env.ENV || "DEV";
+console.log({ env });
 
 export async function sqsHandler(message: Message) {
   try {
-    const { MessageId, Body } = message;
+    const { Body } = message;
 
     if (!Body) {
       return console.log("no body");
@@ -25,29 +26,15 @@ export async function sqsHandler(message: Message) {
         object: { key },
       } = s3;
 
-      console.log("Running new task on ECS...");
-      const taskRun = new RunTaskCommand({
-        taskDefinition: awsTaskDef,
-        cluster: awsEcsCluster,
-        launchType: "FARGATE",
-        networkConfiguration: {
-          awsvpcConfiguration: {
-            securityGroups: ["sg-478b0522"],
-            assignPublicIp: "ENABLED",
-            subnets: ["subnet-2aab1251", "subnet-f14e39bd", "subnet-259b9d4d"],
-          },
-        },
-        overrides: {
-          containerOverrides: [
-            {
-              name: "video-transcoder",
-              environment: [{ name: "KEY", value: key }],
-            },
-          ],
-        },
-      });
-
-      await ecsClient.send(taskRun);
+      if (env === "DEV") {
+        console.log("Running task locally...");
+        await startDockerLocally(key);
+        console.log("Task started");
+      } else {
+        console.log("Running new task on ECS...");
+        await runECSTask(key);
+        console.log("Task started");
+      }
     }
   } catch (error) {
     console.error(error);
